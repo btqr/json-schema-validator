@@ -11,6 +11,18 @@ public class Token {
         this.replacedString = replacedString;
     }
 
+    public TokenType getTokenType() {
+        return tokenType;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public String getReplacedString() {
+        return replacedString;
+    }
+
     @Override
     public String toString() {
         return "Token{" +

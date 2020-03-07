@@ -27,7 +27,7 @@ public class TokenizerImpl implements Tokenizer {
 
             for(TokenType tokenType : TokenType.values()) {
                 if (partOfWord.matches(tokenType.getRegex())) {
-                    if(!tokenType.name().equals("WHITE_SIGN")) {
+                    if (tokenType.getTextRepresentation() != null) {
                         tokens.add(new Token(tokenType, lineNumber, partOfWord));
                     }
                     word = word.substring(i, word.length());

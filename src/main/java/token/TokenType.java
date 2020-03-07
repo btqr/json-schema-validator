@@ -17,6 +17,8 @@ public enum TokenType {
     DESCRIPTION_KW("<DESCRIPTION_KW>","\"description\""),
     MINIMUM_KW("<MINIMUM_KW>", "\"minimum\""),
     MAXIMUM_KW("<MAXIMUM_KW>", "\"maximum\""),
+    MIN_LENGTH_KW("<MIN_LENGTH_KW>", "\"minLength\""),
+    MAX_LENGTH_KW("<MAX_LENGTH_KW>", "\"maxLength\""),
     ENUM_KW("<ENUM_KW>", "\"enum\""),
     DEFINITIONS_KW("<DEFINITIONS_KW>", "\"definitions\""),
     OPEN_BRACE("<OPEN_BRACE>", "\\{"),
@@ -26,8 +28,8 @@ public enum TokenType {
     CLOSE_BRACKET("<CLOSE_BRACKET>", "\\]"),
     COMMA("<COMMA>", "\\,"),
     STRING("<STRING>", "([\"'])(?:(?=(\\\\?))\\2.)*?\\1"),
-    NUMBER("<NUMBER>", "\\b(\\d+)"),
-    WHITE_SIGN("", "\\s+"); // is not tokenized, just for text validation
+    DIGIT("<DIGIT>", "^\\d+$"),
+    WHITE_SIGN(null, "\\s+");
 
     private String textRepresentation;
     private String regex;
