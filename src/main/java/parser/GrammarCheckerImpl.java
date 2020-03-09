@@ -8,7 +8,10 @@ import java.util.List;
 
 public class GrammarCheckerImpl implements GrammarChecker {
 
+    private List<Token> tokens;
+
     public void checkGrammar(List<Token> tokens) throws ParsingException {
+        this.tokens = tokens;
         checkFile(tokens);
     }
 
@@ -20,7 +23,7 @@ public class GrammarCheckerImpl implements GrammarChecker {
             tokens.addAll(copyOfTokenList);
             return true;
         }
-        throw new ParsingException(copyOfTokenList);
+        throw new ParsingException(copyOfTokenList, this.tokens);
     }
 
     private boolean checkBody(List<Token> tokens) {

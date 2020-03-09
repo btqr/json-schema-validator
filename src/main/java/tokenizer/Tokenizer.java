@@ -11,5 +11,5 @@ public interface Tokenizer {
      * @return - list of tokens
      * @throws UnrecognizedSymbolException - exception when text is not recognized as valid token
      */
-    List<Token> apply(String inputText) throws UnrecognizedSymbolException;
+    List<Token> tokenize(String inputText) throws UnrecognizedSymbolException;
 }

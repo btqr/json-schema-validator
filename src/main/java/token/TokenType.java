@@ -27,8 +27,8 @@ public enum TokenType {
     OPEN_BRACKET("<OPEN_BRACKET>", "\\["),
     CLOSE_BRACKET("<CLOSE_BRACKET>", "\\]"),
     COMMA("<COMMA>", "\\,"),
-    STRING("<STRING>", "([\"])(?:(?=(\\\\?))\\2.)*?\\1"),
-    DIGIT("<DIGIT  >", "^\\d+$"),
+    STRING("<STRING>", "\"([^\"\\\\\\\\]*|\\\\\\\\[\"\\\\\\\\bfnrt\\/]|\\\\\\\\u[0-9a-f]{4})*\""),
+    DIGIT("<DIGIT>", "^\\d+$"),
     WHITE_SIGN(null, "\\s+");
 
     private String textRepresentation;

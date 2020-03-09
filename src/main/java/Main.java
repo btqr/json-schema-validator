@@ -21,8 +21,9 @@ class Main {
         GrammarChecker grammarChecker = new GrammarCheckerImpl();
 
         try {
-            List<Token> tokenList = tokenizer.apply(exampleJsonScheme);
+            List<Token> tokenList = tokenizer.tokenize(exampleJsonScheme);
             grammarChecker.checkGrammar(tokenList);
+            System.out.println("Text validation passed.");
         } catch (UnrecognizedSymbolException | ParsingException ex) {
             System.err.print(ex.getMessage());
         }

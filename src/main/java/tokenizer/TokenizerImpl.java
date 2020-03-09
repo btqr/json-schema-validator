@@ -9,7 +9,7 @@ import java.util.List;
 public class TokenizerImpl implements Tokenizer {
 
     @Override
-    public List<Token> apply(String inputText) throws UnrecognizedSymbolException {
+    public List<Token> tokenize(String inputText) throws UnrecognizedSymbolException {
         List<Token> tokens = new ArrayList<>();
         String[] lines = inputText.split("\n");
         int lineNumber = 0;
