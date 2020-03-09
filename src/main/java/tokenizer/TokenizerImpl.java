@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TokenizerImpl implements Tokenizer {
+
     @Override
     public List<Token> apply(String inputText) throws UnrecognizedSymbolException {
         List<Token> tokens = new ArrayList<>();
