@@ -51,13 +51,14 @@ public class GrammarCheckerImpl implements GrammarChecker {
     private boolean checkSecondAlternativeForBody(List<Token> tokens) {
         List<Token> copyOfTokenList = new ArrayList<>(tokens);
         boolean correctGrammar = true;
-        boolean anyCorrect = false;
+        boolean allCorrect = false;
         while (correctGrammar) {
             if (checkEntry(copyOfTokenList)) {
-                anyCorrect = true;
+                allCorrect = true;
                 tokens.clear();
                 tokens.addAll(copyOfTokenList);
                 if (checkTerminalToken(copyOfTokenList, TokenType.COMMA)) {
+                    allCorrect = false;
                     tokens.clear();
                     tokens.addAll(copyOfTokenList);
                 } else {
@@ -67,7 +68,7 @@ public class GrammarCheckerImpl implements GrammarChecker {
                 correctGrammar = false;
             }
         }
-        return anyCorrect;
+        return allCorrect;
     }
 
     private boolean checkEntry(List<Token> tokens) {
@@ -282,7 +283,8 @@ public class GrammarCheckerImpl implements GrammarChecker {
     private boolean checkTypeBody(List<Token> tokens) {
         return checkTerminalToken(tokens, TokenType.OBJECT_KW) || checkTerminalToken(tokens, TokenType.INTEGER_KW)
                 || checkTerminalToken(tokens, TokenType.NUMBER_KW) || checkTerminalToken(tokens, TokenType.STRING_KW)
-                || checkTerminalToken(tokens, TokenType.NULL_KW) || checkTerminalToken(tokens, TokenType.ARRAY_KW);
+                || checkTerminalToken(tokens, TokenType.NULL_KW) || checkTerminalToken(tokens, TokenType.ARRAY_KW)
+                || checkTerminalToken(tokens, TokenType.BOOLEAN_KW);
     }
 
     private boolean checkIdEntry(List<Token> tokens) {
@@ -383,13 +385,14 @@ public class GrammarCheckerImpl implements GrammarChecker {
     private boolean checkSecondAlternativeForMultipleStrings(List<Token> tokens) {
         List<Token> copyOfTokenList = new ArrayList<>(tokens);
         boolean correctGrammar = true;
-        boolean anyCorrect = false;
+        boolean allCorrect = false;
         while (correctGrammar) {
             if (checkTerminalToken(copyOfTokenList, TokenType.STRING)) {
-                anyCorrect = true;
+                allCorrect = true;
                 tokens.clear();
                 tokens.addAll(copyOfTokenList);
                 if (checkTerminalToken(copyOfTokenList, TokenType.COMMA)) {
+                    allCorrect = false;
                     tokens.clear();
                     tokens.addAll(copyOfTokenList);
                 } else {
@@ -399,7 +402,7 @@ public class GrammarCheckerImpl implements GrammarChecker {
                 correctGrammar = false;
             }
         }
-        return anyCorrect;
+        return allCorrect;
     }
 
     private boolean checkTerminalToken(List<Token> tokens, TokenType tokenType) {
