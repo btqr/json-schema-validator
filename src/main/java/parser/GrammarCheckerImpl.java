@@ -5,6 +5,8 @@ import token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class GrammarCheckerImpl implements GrammarChecker {
 
@@ -72,87 +74,21 @@ public class GrammarCheckerImpl implements GrammarChecker {
     }
 
     private boolean checkEntry(List<Token> tokens) {
-        List<List<Token>> copies = List.of(new ArrayList<>(tokens), new ArrayList<>(tokens), new ArrayList<>(tokens), new ArrayList<>(tokens),
-                new ArrayList<>(tokens), new ArrayList<>(tokens), new ArrayList<>(tokens), new ArrayList<>(tokens), new ArrayList<>(tokens),
-                new ArrayList<>(tokens), new ArrayList<>(tokens), new ArrayList<>(tokens), new ArrayList<>(tokens),
-                new ArrayList<>(tokens), new ArrayList<>(tokens));
-
+        List<Token> copy = new ArrayList<>(tokens);
         boolean correctGrammar = false;
 
-        if (checkIdEntry(copies.get(0))) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(0));
-        }
-        if (checkSchemaEntry(copies.get(1)) && copies.get(1).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(1));
-        }
-        if (checkTitleEntry(copies.get(2)) && copies.get(2).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(2));
-        }
-        if (checkRequiredEntry(copies.get(3)) && copies.get(3).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(3));
-        }
-        if (checkTypeEntry(copies.get(4)) && copies.get(4).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(4));
-        }
-        if (checkPropertiesEntry(copies.get(5)) && copies.get(5).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(5));
-        }
-        if (checkStringEntry(copies.get(6)) && copies.get(6).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(6));
-        }
-        if (checkDefinitionEntry(copies.get(7)) && copies.get(7).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(7));
-        }
-        if (checkDescriptionEntry(copies.get(8)) && copies.get(8).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(8));
-        }
-        if (checkEnumEntry(copies.get(9)) && copies.get(9).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(9));
-        }
-        if (checkMinimumEntry(copies.get(10)) && copies.get(10).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(10));
-        }
-        if (checkMaximumEntry(copies.get(11)) && copies.get(11).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(11));
-        }
-        if (checkRefEntry(copies.get(12)) && copies.get(12).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(12));
-        }
-        if (checkMinLength(copies.get(13)) && copies.get(13).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(13));
-        }
-        if (checkMaxLength(copies.get(14)) && copies.get(14).size() < tokens.size()) {
-            correctGrammar = true;
-            tokens.clear();
-            tokens.addAll(copies.get(14));
+        List<Predicate<List<Token>>> entryCheckers = List.of(this::checkIdEntry, this::checkSchemaEntry, this::checkTitleEntry,
+                this::checkRequiredEntry, this::checkTypeEntry, this::checkPropertiesEntry, this::checkStringEntry,
+                this::checkDefinitionEntry, this::checkDescriptionEntry, this::checkEnumEntry, this::checkMinimumEntry,
+                this::checkMaximumEntry, this::checkRefEntry, this::checkMinLength, this::checkMaxLength);
+
+        for (Predicate<List<Token>> checker : entryCheckers) {
+            List<Token> localCopy = new ArrayList<>(tokens);
+            if (checker.test(localCopy) && localCopy.size() < copy.size()) {
+                correctGrammar = true;
+                tokens.clear();
+                tokens.addAll(localCopy);
+            }
         }
 
         return correctGrammar;
@@ -288,36 +224,15 @@ public class GrammarCheckerImpl implements GrammarChecker {
     }
 
     private boolean checkIdEntry(List<Token> tokens) {
-        List<Token> copyOfTokenList = new ArrayList<>(tokens);
-        if (checkTerminalToken(copyOfTokenList, TokenType.ID_KW) && checkTerminalToken(copyOfTokenList, TokenType.COLON)
-                && checkTerminalToken(copyOfTokenList, TokenType.STRING)) {
-            tokens.clear();
-            tokens.addAll(copyOfTokenList);
-            return true;
-        }
-        return false;
+        return checkTerminalTokens(tokens, List.of(TokenType.ID_KW, TokenType.COLON, TokenType.STRING));
     }
 
     private boolean checkSchemaEntry(List<Token> tokens) {
-        List<Token> copyOfTokenList = new ArrayList<>(tokens);
-        if (checkTerminalToken(copyOfTokenList, TokenType.SCHEMA_KW) && checkTerminalToken(copyOfTokenList, TokenType.COLON)
-                && checkTerminalToken(copyOfTokenList, TokenType.STRING)) {
-            tokens.clear();
-            tokens.addAll(copyOfTokenList);
-            return true;
-        }
-        return false;
+        return checkTerminalTokens(tokens, List.of(TokenType.SCHEMA_KW, TokenType.COLON, TokenType.STRING));
     }
 
     private boolean checkTitleEntry(List<Token> tokens) {
-        List<Token> copyOfTokenList = new ArrayList<>(tokens);
-        if (checkTerminalToken(copyOfTokenList, TokenType.TITLE_KW) && checkTerminalToken(copyOfTokenList, TokenType.COLON)
-                && checkTerminalToken(copyOfTokenList, TokenType.STRING)) {
-            tokens.clear();
-            tokens.addAll(copyOfTokenList);
-            return true;
-        }
-        return false;
+        return checkTerminalTokens(tokens, List.of(TokenType.TITLE_KW, TokenType.COLON, TokenType.STRING));
     }
 
     private boolean checkRequiredEntry(List<Token> tokens) {
@@ -403,6 +318,18 @@ public class GrammarCheckerImpl implements GrammarChecker {
             }
         }
         return allCorrect;
+    }
+
+    private boolean checkTerminalTokens(List<Token> tokens, List<TokenType> grammar) {
+        if (tokens.stream()
+                .map(Token::getTokenType)
+                .collect(Collectors.toList())
+                .subList(0, grammar.size())
+                .equals(grammar)) {
+            tokens.subList(0, grammar.size()).clear();
+            return true;
+        }
+        return false;
     }
 
     private boolean checkTerminalToken(List<Token> tokens, TokenType tokenType) {
