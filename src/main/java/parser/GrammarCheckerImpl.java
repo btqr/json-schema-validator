@@ -37,8 +37,10 @@ public class GrammarCheckerImpl implements GrammarChecker {
             tokens.clear();
             tokens.addAll(copies.get(1));
         }
-
-        return correctGrammar;
+        if (correctGrammar) {
+            return true;
+        }
+        throw new ParsingException(tokens, this.tokens);
     }
 
     private boolean checkFirstAlternativeForBody(List<Token> tokens) {
@@ -86,7 +88,10 @@ public class GrammarCheckerImpl implements GrammarChecker {
             }
         }
 
-        return correctGrammar;
+        if (correctGrammar) {
+            return true;
+        }
+        throw new ParsingException(tokens, this.tokens);
     }
 
     private boolean checkCloseBrace(List<Token> tokens) {
@@ -238,10 +243,14 @@ public class GrammarCheckerImpl implements GrammarChecker {
     }
 
     private boolean checkTypeBody(List<Token> tokens) {
-        return checkTerminalToken(tokens, TokenType.OBJECT_KW) || checkTerminalToken(tokens, TokenType.INTEGER_KW)
+        boolean correctGrammar = checkTerminalToken(tokens, TokenType.OBJECT_KW) || checkTerminalToken(tokens, TokenType.INTEGER_KW)
                 || checkTerminalToken(tokens, TokenType.NUMBER_KW) || checkTerminalToken(tokens, TokenType.STRING_KW)
                 || checkTerminalToken(tokens, TokenType.NULL_KW) || checkTerminalToken(tokens, TokenType.ARRAY_KW)
                 || checkTerminalToken(tokens, TokenType.BOOLEAN_KW);
+        if (correctGrammar) {
+            return true;
+        }
+        throw new ParsingException(tokens, this.tokens);
     }
 
     private boolean checkMultipleStrings(List<Token> tokens) {
@@ -260,7 +269,10 @@ public class GrammarCheckerImpl implements GrammarChecker {
             tokens.addAll(copies.get(1));
         }
 
-        return correctGrammar;
+        if (correctGrammar) {
+            return true;
+        }
+        throw new ParsingException(tokens, this.tokens);
     }
 
     private boolean checkNumber(List<Token> tokens) {
@@ -313,6 +325,9 @@ public class GrammarCheckerImpl implements GrammarChecker {
         if (correctGrammar) {
             tokens.clear();
             tokens.addAll(copy);
+        }
+        if (!correctGrammar && copy.size() != tokens.size()) {
+            throw new ParsingException(tokens, this.tokens);
         }
         return correctGrammar;
     }
