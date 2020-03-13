@@ -45,7 +45,7 @@
         "zip_code": {
           "type": "string",
           "minLength": 5,
-          "maxLength": 60
+          "maxLength": 6
         }
       }
     }
