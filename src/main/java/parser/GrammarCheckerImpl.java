@@ -17,10 +17,7 @@ public class GrammarCheckerImpl implements GrammarChecker {
     }
 
     private boolean checkFile(List<Token> tokens) {
-        if (checkTokens(List.of(this::checkOpenBrace, this::checkBody, this::checkCloseBrace), tokens)) {
-            return true;
-        }
-        throw new ParsingException(tokens, this.tokens);
+        return checkTokens(List.of(this::checkOpenBrace, this::checkBody, this::checkCloseBrace), tokens);
     }
 
     private boolean checkBody(List<Token> tokens) {
@@ -88,6 +85,81 @@ public class GrammarCheckerImpl implements GrammarChecker {
             }
         }
 
+        if (correctGrammar) {
+            return true;
+        }
+        throw new ParsingException(tokens, this.tokens);
+    }
+
+    private boolean checkMaxLength(List<Token> tokens) {
+        return checkTokens(List.of(this::checkMaxLengthKeyword, this::checkColonKeyword, this::checkNumber), tokens);
+    }
+
+    private boolean checkMinLength(List<Token> tokens) {
+        return checkTokens(List.of(this::checkMinLengthKeyword, this::checkColonKeyword, this::checkNumber), tokens);
+    }
+
+    private boolean checkRefEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkRefKeyword, this::checkColonKeyword, this::checkString), tokens);
+    }
+
+    private boolean checkMaximumEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkMaximumKeyword, this::checkColonKeyword, this::checkNumber), tokens);
+    }
+
+    private boolean checkMinimumEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkMinimumKeyword, this::checkColonKeyword, this::checkNumber), tokens);
+    }
+
+    private boolean checkEnumEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkEnumKeyword, this::checkColonKeyword, this::checkStringArray), tokens);
+    }
+
+    private boolean checkDescriptionEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkDescriptionKeyword, this::checkColonKeyword, this::checkString), tokens);
+    }
+
+    private boolean checkTypeEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkTypeKeyword, this::checkColonKeyword, this::checkTypeBody), tokens);
+    }
+
+    private boolean checkDefinitionEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkDefinitionsKeyword, this::checkColonKeyword, this::checkFile), tokens);
+    }
+
+    private boolean checkIdEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkIdKeyword, this::checkColonKeyword, this::checkString), tokens);
+    }
+
+    private boolean checkSchemaEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkSchemaKeyword, this::checkColonKeyword, this::checkString), tokens);
+    }
+
+    private boolean checkTitleEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkTitleKeyword, this::checkColonKeyword, this::checkString), tokens);
+    }
+
+    private boolean checkRequiredEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkRequiredKeyword, this::checkColonKeyword, this::checkStringArray), tokens);
+    }
+
+    private boolean checkStringArray(List<Token> tokens) {
+        return checkTokens(List.of(this::checkOpenBracket, this::checkMultipleStrings, this::checkCloseBracket), tokens);
+    }
+
+    private boolean checkStringEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkString, this::checkColonKeyword, this::checkFile), tokens);
+    }
+
+    private boolean checkPropertiesEntry(List<Token> tokens) {
+        return checkTokens(List.of(this::checkPropertiesKeyword, this::checkColonKeyword, this::checkFile), tokens);
+    }
+
+    private boolean checkTypeBody(List<Token> tokens) {
+        boolean correctGrammar = checkTerminalToken(tokens, TokenType.OBJECT_KW) || checkTerminalToken(tokens, TokenType.INTEGER_KW)
+                || checkTerminalToken(tokens, TokenType.NUMBER_KW) || checkTerminalToken(tokens, TokenType.STRING_KW)
+                || checkTerminalToken(tokens, TokenType.NULL_KW) || checkTerminalToken(tokens, TokenType.ARRAY_KW)
+                || checkTerminalToken(tokens, TokenType.BOOLEAN_KW);
         if (correctGrammar) {
             return true;
         }
@@ -178,79 +250,8 @@ public class GrammarCheckerImpl implements GrammarChecker {
         return checkTerminalToken(tokens, TokenType.CLOSE_BRACKET);
     }
 
-    private boolean checkMaxLength(List<Token> tokens) {
-        return checkTokens(List.of(this::checkMaxLengthKeyword, this::checkColonKeyword, this::checkNumber), tokens);
-    }
-
-    private boolean checkMinLength(List<Token> tokens) {
-        return checkTokens(List.of(this::checkMinLengthKeyword, this::checkColonKeyword, this::checkNumber), tokens);
-    }
-
-    private boolean checkRefEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkRefKeyword, this::checkColonKeyword, this::checkString), tokens);
-    }
-
-    private boolean checkMaximumEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkMaximumKeyword, this::checkColonKeyword, this::checkNumber), tokens);
-    }
-
-    private boolean checkMinimumEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkMinimumKeyword, this::checkColonKeyword, this::checkNumber), tokens);
-    }
-
-    private boolean checkEnumEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkEnumKeyword, this::checkColonKeyword, this::checkStringArray), tokens);
-    }
-
-    private boolean checkDescriptionEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkDescriptionKeyword, this::checkColonKeyword, this::checkString), tokens);
-    }
-
-    private boolean checkTypeEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkTypeKeyword, this::checkColonKeyword, this::checkTypeBody), tokens);
-    }
-
-    private boolean checkDefinitionEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkDefinitionsKeyword, this::checkColonKeyword, this::checkFile), tokens);
-    }
-
-    private boolean checkIdEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkIdKeyword, this::checkColonKeyword, this::checkString), tokens);
-    }
-
-    private boolean checkSchemaEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkSchemaKeyword, this::checkColonKeyword, this::checkString), tokens);
-    }
-
-    private boolean checkTitleEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkTitleKeyword, this::checkColonKeyword, this::checkString), tokens);
-    }
-
-    private boolean checkRequiredEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkRequiredKeyword, this::checkColonKeyword, this::checkStringArray), tokens);
-    }
-
-    private boolean checkStringArray(List<Token> tokens) {
-        return checkTokens(List.of(this::checkOpenBracket, this::checkMultipleStrings, this::checkCloseBracket), tokens);
-    }
-
-    private boolean checkStringEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkString, this::checkColonKeyword, this::checkFile), tokens);
-    }
-
-    private boolean checkPropertiesEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkPropertiesKeyword, this::checkColonKeyword, this::checkFile), tokens);
-    }
-
-    private boolean checkTypeBody(List<Token> tokens) {
-        boolean correctGrammar = checkTerminalToken(tokens, TokenType.OBJECT_KW) || checkTerminalToken(tokens, TokenType.INTEGER_KW)
-                || checkTerminalToken(tokens, TokenType.NUMBER_KW) || checkTerminalToken(tokens, TokenType.STRING_KW)
-                || checkTerminalToken(tokens, TokenType.NULL_KW) || checkTerminalToken(tokens, TokenType.ARRAY_KW)
-                || checkTerminalToken(tokens, TokenType.BOOLEAN_KW);
-        if (correctGrammar) {
-            return true;
-        }
-        throw new ParsingException(tokens, this.tokens);
+    private boolean checkNumber(List<Token> tokens) {
+        return checkTerminalToken(tokens, TokenType.NUMBER);
     }
 
     private boolean checkMultipleStrings(List<Token> tokens) {
@@ -273,23 +274,6 @@ public class GrammarCheckerImpl implements GrammarChecker {
             return true;
         }
         throw new ParsingException(tokens, this.tokens);
-    }
-
-    private boolean checkNumber(List<Token> tokens) {
-        List<Token> copyOfTokenList = new ArrayList<>(tokens);
-        boolean correctGrammar = true;
-        boolean anyCorrect = false;
-
-        while (correctGrammar) {
-            if (checkTerminalToken(copyOfTokenList, TokenType.DIGIT)) {
-                anyCorrect = true;
-                tokens.clear();
-                tokens.addAll(copyOfTokenList);
-            } else {
-                correctGrammar = false;
-            }
-        }
-        return anyCorrect;
     }
 
     private boolean checkFirstAlternativeForMultipleStrings(List<Token> tokens) {

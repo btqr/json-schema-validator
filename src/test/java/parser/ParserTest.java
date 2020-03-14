@@ -38,12 +38,12 @@ public class ParserTest {
     public void shouldParseOtherExampleFilesCorrectly() throws IOException, UnrecognizedSymbolException {
         // given
         String example1 = Files.readString(Path.of("schema_example1.json"));
-        //String example2 = Files.readString(Path.of("schema_example2.json"));
+        String example2 = Files.readString(Path.of("schema_example2.json"));
         String example3 = Files.readString(Path.of("schema_example3.json"));
 
         // when
         grammarChecker.checkGrammar(tokenizer.tokenize(example1));
-        //grammarChecker.checkGrammar(tokenizer.tokenize(example2));
+        grammarChecker.checkGrammar(tokenizer.tokenize(example2));
         grammarChecker.checkGrammar(tokenizer.tokenize(example3));
 
         // then

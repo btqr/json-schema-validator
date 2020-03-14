@@ -29,7 +29,7 @@ public enum TokenType {
     CLOSE_BRACKET("\\]"),
     COMMA("\\,"),
     STRING("\"([^\"\\\\\\\\]*|\\\\\\\\[\"\\\\\\\\bfnrt\\/]|\\\\\\\\u[0-9a-f]{4})*\""),
-    DIGIT("^\\d+$"),
+    NUMBER("-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?"),
     WHITE_SIGN("\\s+");
 
     private String regex;
