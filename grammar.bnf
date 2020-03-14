@@ -1,0 +1,46 @@
+<object> ::= <open-brace><body><close-brace>
+
+<body> ::= <entry> | <body><comma><entry>  
+
+<entry> ::= <id-entry> | <schema-entry> | <title-entry> 
+            | <required-entry> | <type-entry> | <properties-entry> 
+            | <string-entry>   | <definition-entry> | <description-entry>
+            | <enum-entry> | <ref-entry> | <minimum-entry> | <maximum-entry>
+            | <minlength-entry> | <maxlength-entry>
+
+<id-entry>          ::= <id-kw><colon><string>
+<schema-entry>      ::= <schema-kw><colon><string>
+<title-entry>       ::= <title-kw><colon><string>
+<required-entry>    ::= <required-kw><colon><string-array>
+<type-entry>        ::= <type-kw><colon><type-body>
+<proporties-entry>  ::= <proporties-kw><colon><proporties-body> 
+<string-entry>      ::= <string><colon><string-body>
+<definition-entry>  ::= <definitions-kw><colon><definition-body>
+<description-entry> ::= <description-kw><colon><string>
+<enum-entry>        ::= <enum-kw><colon><string-array>
+<ref-entry>         ::= <ref-kw><colon><string>
+<minimum-entry>     ::= <minimum-kw><colon><number>
+<maximum-entry>     ::= <maximum-kw><colon><number>
+<minlength-entry>   ::= <minlength-kw><colon><number>
+<maxlength-entry>>  ::= <maxlength-kw><colon><number>
+
+<type-body> ::= <object-kw> | <integer-kw> | <number-kw> | <string-kw> 
+                | <null-kw> | <array-kw> | <boolean-kw>
+<proporties-body>  ::= <object>
+<string-body>      ::= <object>
+<definition-body>  ::= <object>
+
+<string-array>     ::= <open-bracket><multiple-strings><close-bracket>
+<multiple-strings> ::= <string> | <multiple-strings><comma><string>
+
+
+# Terminal tokens described as regex in tokenizer:
+    # <open-brace>, <close-brace>, <comma>, <colon>, <open-bracket>, <close-bracket>,
+    # <id-kw>, <schema-kw>, <title-kw>, <required-kw>, <type-kw>, <proporties-kw>,
+    # <string>, <definitions-kw>, <enum-kw>, <ref-kw>, <minimum-kw>,<maximum-kw>,
+    # <minlength-kw>, <maxlength-kw>, <number>, <object-kw>, <integer-kw>, <number-kw>,
+    # <string-kw>, <null-kw>, <array-kw>, <boolean-kw>
+
+
+
+

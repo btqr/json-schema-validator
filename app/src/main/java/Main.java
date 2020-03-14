@@ -26,7 +26,7 @@ class Main {
         } catch (UnrecognizedSymbolException | ParsingException ex) {
             System.err.print(ex.getMessage());
         } catch (IOException ex) {
-            System.err.print("Couldnt read file given as argument" + args[0] + ".");
+            System.err.print("Couldn't read file given as argument" + args[0] + ".");
         } catch (ArrayIndexOutOfBoundsException ex) {
             System.err.print("Path of file to validate is missing. Please give valid file path as argument.");
         }

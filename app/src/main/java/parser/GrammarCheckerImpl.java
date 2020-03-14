@@ -13,10 +13,10 @@ public class GrammarCheckerImpl implements GrammarChecker {
 
     public void checkGrammar(List<Token> tokens) throws ParsingException {
         this.tokens = tokens;
-        checkFile(tokens);
+        checkObject(tokens);
     }
 
-    private boolean checkFile(List<Token> tokens) {
+    private boolean checkObject(List<Token> tokens) {
         return checkTokens(List.of(this::checkOpenBrace, this::checkBody, this::checkCloseBrace), tokens);
     }
 
@@ -64,7 +64,10 @@ public class GrammarCheckerImpl implements GrammarChecker {
                 correctGrammar = false;
             }
         }
-        return allCorrect;
+        if(allCorrect) {
+            return true;
+        }
+        throw new ParsingException(tokens, this.tokens);
     }
 
     private boolean checkEntry(List<Token> tokens) {
@@ -124,7 +127,7 @@ public class GrammarCheckerImpl implements GrammarChecker {
     }
 
     private boolean checkDefinitionEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkDefinitionsKeyword, this::checkColonKeyword, this::checkFile), tokens);
+        return checkTokens(List.of(this::checkDefinitionsKeyword, this::checkColonKeyword, this::checkObject), tokens);
     }
 
     private boolean checkIdEntry(List<Token> tokens) {
@@ -148,11 +151,11 @@ public class GrammarCheckerImpl implements GrammarChecker {
     }
 
     private boolean checkStringEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkString, this::checkColonKeyword, this::checkFile), tokens);
+        return checkTokens(List.of(this::checkString, this::checkColonKeyword, this::checkObject), tokens);
     }
 
     private boolean checkPropertiesEntry(List<Token> tokens) {
-        return checkTokens(List.of(this::checkPropertiesKeyword, this::checkColonKeyword, this::checkFile), tokens);
+        return checkTokens(List.of(this::checkPropertiesKeyword, this::checkColonKeyword, this::checkObject), tokens);
     }
 
     private boolean checkTypeBody(List<Token> tokens) {
@@ -234,10 +237,6 @@ public class GrammarCheckerImpl implements GrammarChecker {
         return checkTerminalToken(tokens, TokenType.COLON);
     }
 
-    private boolean checkStringKeyword(List<Token> tokens) {
-        return checkTerminalToken(tokens, TokenType.STRING_KW);
-    }
-
     private boolean checkString(List<Token> tokens) {
         return checkTerminalToken(tokens, TokenType.STRING);
     }
@@ -300,7 +299,10 @@ public class GrammarCheckerImpl implements GrammarChecker {
                 correctGrammar = false;
             }
         }
-        return allCorrect;
+        if(allCorrect) {
+            return true;
+        }
+        throw new ParsingException(tokens, this.tokens);
     }
 
     private boolean checkTokens(List<Predicate<List<Token>>> checkers, List<Token> tokens) {
