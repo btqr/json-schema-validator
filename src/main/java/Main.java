@@ -6,26 +6,29 @@ import tokenizer.Tokenizer;
 import tokenizer.TokenizerImpl;
 import tokenizer.UnrecognizedSymbolException;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
 class Main {
 
-    private static final String FILE_PATH = "example_json_schema.json";
+    public static void main(String[] args) {
 
-    public static void main(String[] args) throws Exception {
-
-        String exampleJsonScheme = Files.readString(Path.of(FILE_PATH));
         Tokenizer tokenizer = new TokenizerImpl();
         GrammarChecker grammarChecker = new GrammarCheckerImpl();
 
         try {
+            String exampleJsonScheme = Files.readString(Path.of(args[0]));
             List<Token> tokenList = tokenizer.tokenize(exampleJsonScheme);
             grammarChecker.checkGrammar(tokenList);
-            System.out.println("Text validation passed.");
+            System.out.println("Validation successful.");
         } catch (UnrecognizedSymbolException | ParsingException ex) {
             System.err.print(ex.getMessage());
+        } catch (IOException ex) {
+            System.err.print("Couldnt read file given as argument" + args[0] + ".");
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            System.err.print("Path of file to validate is missing. Please give valid file path as argument.");
         }
 
     }

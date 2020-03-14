@@ -40,11 +40,13 @@ public class ParserTest {
         String example1 = Files.readString(Path.of("schema_example1.json"));
         String example2 = Files.readString(Path.of("schema_example2.json"));
         String example3 = Files.readString(Path.of("schema_example3.json"));
+        String example4 = Files.readString(Path.of("schema_example4.json"));
 
         // when
         grammarChecker.checkGrammar(tokenizer.tokenize(example1));
         grammarChecker.checkGrammar(tokenizer.tokenize(example2));
         grammarChecker.checkGrammar(tokenizer.tokenize(example3));
+        grammarChecker.checkGrammar(tokenizer.tokenize(example4));
 
         // then
         // exception wont be thrown
